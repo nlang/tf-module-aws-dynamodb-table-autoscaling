@@ -27,7 +27,7 @@ module "some_table" {
 
 module "some_other_table" {
 
-  source = "git@github.com/nlang/tf-module-aws-dynamodb-table-autoscaling.git"
+  source = "github.com/nlang/tf-module-aws-dynamodb-table-autoscaling"
 
   TableName = "myOtherNewTable"
   TableKeys = { hash_key = ["MyId", "N"] }
