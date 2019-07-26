@@ -6,7 +6,7 @@ Creates a table with on-demand billing or provisioned capacity with autoscaling 
 
 ### Simple autoscaling
 
-```hcl-terraform
+```hcl
 
 module "some_table" {
 
@@ -23,7 +23,7 @@ module "some_table" {
 ```
 
 ### Simple on-demand
-```hcl-terraform
+```hcl
 
 module "some_other_table" {
 
@@ -38,7 +38,7 @@ module "some_other_table" {
 ```
 
 ### More options autoscaling
-```hcl-terraform
+```hcl
 
 module "the_third_table" {
 
