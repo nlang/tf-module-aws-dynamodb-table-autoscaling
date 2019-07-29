@@ -55,6 +55,8 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
       non_key_attributes = contains(keys(global_secondary_index.value), "non_key_attributes") ? global_secondary_index.value.non_key_attributes : null
     }
   }
+
+  tags = var.Tags
 }
 
 resource "aws_appautoscaling_target" "Read_AutoScalingTarget" {

@@ -76,3 +76,9 @@ variable "TTL_Attribute" {
   default = null
   description = "(Optional) Set attribute name to enable TTL. Defaults to null => TTL disabled"
 }
+
+variable "Tags" {
+  type = "map"
+  default = {}
+  description = "(Optional) Tags (key/value pairs)"
+}

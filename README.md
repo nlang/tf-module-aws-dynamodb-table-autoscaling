@@ -17,6 +17,11 @@ module "some_table" {
   Capacity_Mode = "PR"
   ReadCapacity = 25
   WriteCapacity = 10
+
+  Tags = {
+    "SomeTag": "A Tag Value"
+    "AnotherTag": 42
+  }
 }
 
 ```
