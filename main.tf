@@ -2,8 +2,8 @@
 resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
 
   name = var.TableName
-  hash_key = var.TableKeys.hash_key[0]
-  range_key = length(var.TableKeys) == 2 ? var.TableKeys.range_key[0] : null
+  hash_key = var.TableKeys.hash_key.name
+  range_key = var.TableKeys.range_key != null ? var.TableKeys.range_key.name : null
 
   billing_mode      = var.Capacity_Mode == "OD" ? "PAY_PER_REQUEST" : "PROVISIONED"
   read_capacity     = var.Capacity_Mode == "OD" ? null : var.ReadCapacity
@@ -15,10 +15,9 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   dynamic "attribute" {
     for_each = var.TableKeys
     content {
-      name = attribute.value[0]
-      type = attribute.value[1]
+      name = attribute.value.name
+      type = attribute.value.type
     }
-
   }
 
   point_in_time_recovery {
@@ -27,6 +26,34 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
 
   lifecycle {
     ignore_changes = ["read_capacity","write_capacity"]
+  }
+
+  ttl {
+    enabled = var.TTL_Attribute != null ? true : false
+    attribute_name = var.TTL_Attribute != null ? var.TTL_Attribute : ""
+  }
+
+  dynamic "local_secondary_index" {
+    for_each = var.Local_Secondary_Index
+    content {
+      name = local_secondary_index.value.name
+      projection_type = local_secondary_index.value.projection_type
+      range_key = local_secondary_index.value.range_key
+      non_key_attributes = contains(keys(local_secondary_index.value), "non_key_attributes") ? local_secondary_index.value.non_key_attributes : null
+    }
+  }
+
+  dynamic "global_secondary_index" {
+    for_each = var.Global_Secondary_Index
+    content {
+      name = global_secondary_index.value.name
+      hash_key = global_secondary_index.value.hash_key
+      range_key = global_secondary_index.value.range_key
+      projection_type = global_secondary_index.value.projection_type
+      read_capacity = var.Capacity_Mode != "OD" ? global_secondary_index.value.read_capacity : null
+      write_capacity = var.Capacity_Mode != "OD" ? global_secondary_index.value.write_capacity : null
+      non_key_attributes = contains(keys(global_secondary_index.value), "non_key_attributes") ? global_secondary_index.value.non_key_attributes : null
+    }
   }
 }
 

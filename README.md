@@ -7,10 +7,9 @@ Creates a table with on-demand billing or provisioned capacity with autoscaling 
 ### Simple autoscaling
 
 ```hcl
-
 module "some_table" {
 
-  source = "git@github.com/nlang/tf-module-aws-dynamodb-table-autoscaling.git"
+  source = "github.com/nlang/tf-module-aws-dynamodb-table-autoscaling"
 
   TableName = "myNewTable"
   TableKeys = { hash_key = ["fooKey", "S"], range_key = ["barKey", "S"] }
@@ -24,7 +23,6 @@ module "some_table" {
 
 ### Simple on-demand
 ```hcl
-
 module "some_other_table" {
 
   source = "github.com/nlang/tf-module-aws-dynamodb-table-autoscaling"
@@ -39,10 +37,9 @@ module "some_other_table" {
 
 ### More options autoscaling
 ```hcl
-
 module "the_third_table" {
 
-  source = "git@github.com/nlang/tf-module-aws-dynamodb-table-autoscaling.git"
+  source = "github.com/nlang/tf-module-aws-dynamodb-table-autoscaling"
 
   TableName = "myThirdTable"
   TableKeys = { hash_key = ["MyId", "N"] }
@@ -63,6 +60,40 @@ module "the_third_table" {
   StreamViewType = "NEW_AND_OLD_IMAGES"
 }
 
+```
+
+### GSI, LSI, TTL
+```hcl
+module "a_more_complex_table" {
+
+  source = "github.com/nlang/tf-module-aws-dynamodb-table-autoscaling"
+
+  TableName = "tableWithLSIandGSI"
+  TableKeys = {
+    hash_key = { name: "hashKey", type: "S" },
+    range_key = { name: "rangeKey", type: "S" },
+    lsi_range_key = { name: "lsiRangeKey", type: "S" },
+    gsiHashKey = { name: "gsiHashKey", type: "S" },
+    gsiRangeKey = { name: "gsiRangeKey", type: "S" },
+  }
+
+  Capacity_Mode = "OD"
+  TTL_Attribute = "expirationTimeEpoch"
+  
+  Local_Secondary_Index = [{
+    name = "myLSI"
+    projection_type = "KEYS_ONLY"
+    range_key = "lsiRangeKey"
+  }]
+
+  Global_Secondary_Index = [{
+    name = "MyGSI"
+    hash_key = "gsiHashKey"
+    range_key = "gsiRangeKey"
+    projection_type = "ALL"
+  }]
+
+}
 ```
 
 ## Author
