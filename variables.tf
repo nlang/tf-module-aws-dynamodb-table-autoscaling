@@ -48,7 +48,7 @@ variable "PointInTimeRecoveryEnabled" {
   default = false
   description = "(Optional) Whether point in time recovery should be enabled (true/false). Defaults to false."
 }
-variable "Stream_Enabled" {
+variable "StreamEnabled" {
   type = "string"
   default = false
   description = "(Optional) Whether dynamodb stream should be enabled (true/false). Defaults to false."
