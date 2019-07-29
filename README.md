@@ -104,7 +104,7 @@ module "a_more_complex_table" {
 ## Output
 | **Parameter**           | **Description**                                |
 | :---------------------- | :--------------------------------------------- |
-| `TableARN`              | `(string)` ARN of the created table            |
+| `TableArn`              | `(string)` ARN of the created table            |
 | `TableName`             | `(string)` Name of the created table           |
 | `DynamoStreamEnabled`   | `(bool)` whether streams are enabled or not    |
 | `DynamoStreamArn`       | `(string)` ARN of the stream, if enabled       |
