@@ -8,7 +8,7 @@ variable "TableKeys" {
   description = "The keys (partition key and optional range key) as name/type tupel. E.g. { hash_key = ['foo', 'S'], range_key = ['bar', 'N'] }"
 }
 
-variable "Capacity_Mode" {
+variable "CapacityMode" {
   type = "string"
   description = "The capacity mode OD = On-Demand, PR = Provisioned"
 }
@@ -43,7 +43,7 @@ variable "WriteCapacityTargetUtilization" {
   default = 70
   description = "(Optional) The target utilization for write capacity scaling activites. Defaults to 70."
 }
-variable "Point_In_Time_Recovery_Enabled" {
+variable "PointInTimeRecoveryEnabled" {
   type = "string"
   default = false
   description = "(Optional) Whether point in time recovery should be enabled (true/false). Defaults to false."
@@ -59,19 +59,19 @@ variable "StreamViewType" {
   description = "(Optional) The stream view type for the DynamoDb stream. Possible values are KEYS_ONLY, NEW_IMAGE, OLD_IMAGE and NEW_AND_OLD_IMAGES. Defaults to NEW_AND_OLD_IMAGES."
 }
 
-variable "Local_Secondary_Index" {
+variable "LocalSecondaryIndex" {
   type = "list"
   default = []
   description = "(Optional) Local Secondary index definition as array of LSI configurations (see Terraform documentation for details)"
 }
 
-variable "Global_Secondary_Index" {
+variable "GlobalSecondaryIndex" {
   type = "list"
   default = []
   description = "(Optional) Global Secondary index definition as array of GSI configurations (see Terraform documentation for details)"
 }
 
-variable "TTL_Attribute" {
+variable "TtlAttribute" {
   type = "string"
   default = null
   description = "(Optional) Set attribute name to enable TTL. Defaults to null => TTL disabled"

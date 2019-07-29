@@ -14,7 +14,7 @@ module "some_table" {
   TableName = "myNewTable"
   TableKeys = { hash_key = ["fooKey", "S"], range_key = ["barKey", "S"] }
 
-  Capacity_Mode = "PR"
+  CapacityMode = "PR"
   ReadCapacity = 25
   WriteCapacity = 10
 
@@ -35,7 +35,7 @@ module "some_other_table" {
   TableName = "myOtherNewTable"
   TableKeys = { hash_key = ["MyId", "N"] }
 
-  Capacity_Mode = "OD"
+  CapacityMode = "OD"
 }
 
 ```
@@ -49,7 +49,7 @@ module "the_third_table" {
   TableName = "myThirdTable"
   TableKeys = { hash_key = ["MyId", "N"] }
 
-  Capacity_Mode = "PR"
+  CapacityMode = "PR"
   
   ReadCapacity = 25
   ReadCapacityMaximumFactor = 10
@@ -59,9 +59,9 @@ module "the_third_table" {
   WriteCapacityMaximumFactor = 15
   WriteCapacityTargetUtilization = 50
   
-  Point_In_Time_Recovery_Enabled = true
+  PointInTimeRecoveryEnabled = true
   
-  Stream_Enabled = true
+  StreamEnabled = true
   StreamViewType = "NEW_AND_OLD_IMAGES"
 }
 
@@ -82,16 +82,16 @@ module "a_more_complex_table" {
     gsiRangeKey = { name: "gsiRangeKey", type: "S" },
   }
 
-  Capacity_Mode = "OD"
-  TTL_Attribute = "expirationTimeEpoch"
+  CapacityMode = "OD"
+  TtlAttribute = "expirationTimeEpoch"
   
-  Local_Secondary_Index = [{
+  LocalSecondaryIndex = [{
     name = "myLSI"
     projection_type = "KEYS_ONLY"
     range_key = "lsiRangeKey"
   }]
 
-  Global_Secondary_Index = [{
+  GlobalSecondaryIndex = [{
     name = "MyGSI"
     hash_key = "gsiHashKey"
     range_key = "gsiRangeKey"

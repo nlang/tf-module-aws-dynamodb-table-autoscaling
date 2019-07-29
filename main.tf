@@ -5,9 +5,9 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   hash_key = var.TableKeys.hash_key.name
   range_key = var.TableKeys.range_key != null ? var.TableKeys.range_key.name : null
 
-  billing_mode      = var.Capacity_Mode == "OD" ? "PAY_PER_REQUEST" : "PROVISIONED"
-  read_capacity     = var.Capacity_Mode == "OD" ? null : var.ReadCapacity
-  write_capacity    = var.Capacity_Mode == "OD" ? null : var.WriteCapacity
+  billing_mode      = var.CapacityMode == "OD" ? "PAY_PER_REQUEST" : "PROVISIONED"
+  read_capacity     = var.CapacityMode == "OD" ? null : var.ReadCapacity
+  write_capacity    = var.CapacityMode == "OD" ? null : var.WriteCapacity
 
   stream_enabled    = var.Stream_Enabled
   stream_view_type  = var.Stream_Enabled == true ? var.StreamViewType : null
@@ -21,7 +21,7 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   }
 
   point_in_time_recovery {
-    enabled = var.Point_In_Time_Recovery_Enabled
+    enabled = var.PointInTimeRecoveryEnabled
   }
 
   lifecycle {
@@ -29,12 +29,12 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   }
 
   ttl {
-    enabled = var.TTL_Attribute != null ? true : false
-    attribute_name = var.TTL_Attribute != null ? var.TTL_Attribute : ""
+    enabled = var.TtlAttribute != null ? true : false
+    attribute_name = var.TtlAttribute != null ? var.TtlAttribute : ""
   }
 
   dynamic "local_secondary_index" {
-    for_each = var.Local_Secondary_Index
+    for_each = var.LocalSecondaryIndex
     content {
       name = local_secondary_index.value.name
       projection_type = local_secondary_index.value.projection_type
@@ -44,14 +44,14 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   }
 
   dynamic "global_secondary_index" {
-    for_each = var.Global_Secondary_Index
+    for_each = var.GlobalSecondaryIndex
     content {
       name = global_secondary_index.value.name
       hash_key = global_secondary_index.value.hash_key
       range_key = global_secondary_index.value.range_key
       projection_type = global_secondary_index.value.projection_type
-      read_capacity = var.Capacity_Mode != "OD" ? global_secondary_index.value.read_capacity : null
-      write_capacity = var.Capacity_Mode != "OD" ? global_secondary_index.value.write_capacity : null
+      read_capacity = var.CapacityMode != "OD" ? global_secondary_index.value.read_capacity : null
+      write_capacity = var.CapacityMode != "OD" ? global_secondary_index.value.write_capacity : null
       non_key_attributes = contains(keys(global_secondary_index.value), "non_key_attributes") ? global_secondary_index.value.non_key_attributes : null
     }
   }
@@ -60,7 +60,7 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
 }
 
 resource "aws_appautoscaling_target" "Read_AutoScalingTarget" {
-  count              = var.Capacity_Mode == "OD" ? 0 : 1
+  count              = var.CapacityMode == "OD" ? 0 : 1
   max_capacity       = var.ReadCapacity * var.ReadCapacityMaximumFactor
   min_capacity       = var.ReadCapacity
   resource_id        = "table/${var.TableName}"
@@ -69,7 +69,7 @@ resource "aws_appautoscaling_target" "Read_AutoScalingTarget" {
 }
 
 resource "aws_appautoscaling_policy" "Read_AutoScalingPolicy" {
-  count              = var.Capacity_Mode == "OD" ? 0 : 1
+  count              = var.CapacityMode == "OD" ? 0 : 1
   name               = "DynamoDBReadCapacityUtilization:${aws_appautoscaling_target.Read_AutoScalingTarget.0.resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.Read_AutoScalingTarget.0.resource_id
@@ -86,7 +86,7 @@ resource "aws_appautoscaling_policy" "Read_AutoScalingPolicy" {
 }
 
 resource "aws_appautoscaling_target" "Write_AutoScalingTarget" {
-  count              = var.Capacity_Mode == "OD" ? 0 : 1
+  count              = var.CapacityMode == "OD" ? 0 : 1
   max_capacity       = var.WriteCapacity * var.WriteCapacityMaximumFactor
   min_capacity       = var.WriteCapacity
   resource_id        = "table/${var.TableName}"
@@ -95,7 +95,7 @@ resource "aws_appautoscaling_target" "Write_AutoScalingTarget" {
 }
 
 resource "aws_appautoscaling_policy" "Write_AutoScalingPolicy" {
-  count              = var.Capacity_Mode == "OD" ? 0 : 1
+  count              = var.CapacityMode == "OD" ? 0 : 1
   name               = "DynamoDBWriteCapacityUtilization:${aws_appautoscaling_target.Write_AutoScalingTarget.0.resource_id}"
   policy_type        = "TargetTrackingScaling"
   resource_id        = aws_appautoscaling_target.Write_AutoScalingTarget.0.resource_id
