@@ -16,11 +16,13 @@ variable "CapacityMode" {
 variable "ReadCapacity" {
   type = "string"
   description = "Desired read capacity units. Put any value if capacity type is OD"
+  default = 0
 }
 
 variable "WriteCapacity" {
   type = "string"
   description = "Desired write capacity units. Put any value if capacity type is OD"
+  default = 0
 }
 
 variable "ReadCapacityMaximumFactor" {
