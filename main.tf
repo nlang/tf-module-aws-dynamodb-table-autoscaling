@@ -9,8 +9,8 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
   read_capacity     = var.CapacityMode == "OD" ? null : var.ReadCapacity
   write_capacity    = var.CapacityMode == "OD" ? null : var.WriteCapacity
 
-  stream_enabled    = var.StreamEnabled
-  stream_view_type  = var.StreamEnabled == true ? var.StreamViewType : null
+  stream_enabled    = var.StreamEnabled ? true : false
+  stream_view_type  = var.StreamEnabled ? var.StreamViewType : null
 
   dynamic "attribute" {
     for_each = var.TableKeys
