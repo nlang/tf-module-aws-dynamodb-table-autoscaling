@@ -3,7 +3,7 @@ resource "aws_dynamodb_table" "DynamoDB_Autoscaling_Table" {
 
   name = var.TableName
   hash_key = var.TableKeys.hash_key.name
-  range_key = var.TableKeys.range_key != null ? var.TableKeys.range_key.name : null
+  range_key = contains(keys(var.TableKeys), "range_key") ? var.TableKeys.range_key.name : null
 
   billing_mode      = var.CapacityMode == "OD" ? "PAY_PER_REQUEST" : "PROVISIONED"
   read_capacity     = var.CapacityMode == "OD" ? null : var.ReadCapacity
